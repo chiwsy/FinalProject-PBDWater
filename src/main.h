@@ -1,6 +1,9 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include<Windows.h>
+
+
 #include <GL/glew.h>
 #include <GL/glut.h>
 

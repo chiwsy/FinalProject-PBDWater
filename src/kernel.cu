@@ -10,6 +10,16 @@
 #include "gridStruct.h"
 #include "intersections.h"
 
+
+#define PI_FLOAT				3.141592653589793f
+#define DELTA_Q				(float)(0.1*core_radius)
+
+#define SQR(x)					((x) * (x))
+#define CUBE(x)					((x) * (x) * (x))
+#define POW6(x)					(CUBE(x) * CUBE(x))
+#define POW9(x)					(POW6(x) * CUBE(x))
+
+
 #if PRESSURE == 1
 	#define DELTA_Q (float)(0.1*H)
 	#define PRESSURE_K 0.1
@@ -101,10 +111,12 @@ void sendToVBO(int N, particle* particles, float * vbo, int width, int height, f
  *************************************/
 
 __device__ float wPoly6Kernel(glm::vec3 p_i, glm::vec3 p_j){
-	float r = glm::length(p_i - p_j);
+	/*float r = glm::length(p_i - p_j);
 	float hr_term = (H * H - r * r);
 	float div = 64.0 * PI * POW_H_9;
-	return 315.0f / div * hr_term * hr_term * hr_term;
+	return 315.0f / div * hr_term * hr_term * hr_term;*/
+	vec3 r(p_i-p_j);
+	return 315.0f / (64.0f * PI_FLOAT * POW9(H)) * CUBE(SQR(H) - dot(r,r));
 }
 
 __device__ glm::vec3 wGradientSpikyKernel(glm::vec3 p_i, glm::vec3 p_j){
@@ -119,15 +131,22 @@ __device__ float calculateRo(particle* particles, glm::vec3 p, int* p_neighbors,
 	glm::vec3 p_j;
 	float ro = 0.0f;
 	for(int i = 0; i < p_num_neighbors; i++){
-		p_j = glm::vec3(particles[p_neighbors[i + index * MAX_NEIGHBORS]].pred_position);
-		ro += wPoly6Kernel(p, p_j);
+		//p_j = glm::vec3(particles[p_neighbors[i + index * MAX_NEIGHBORS]].pred_position);
+		//ro += wPoly6Kernel(p, p_j);
+		glm::vec3 p_j(particles[p_neighbors[i + index * MAX_NEIGHBORS]].pred_position);
+		double kv=wPoly6Kernel(p,p_j);
+		ro+=kv;
 	}
 	return ro;
 }
 
 __device__ glm::vec3 calculateCiGradient(glm::vec3 p_i, glm::vec3 p_j){
-	glm::vec3 Ci = -1.0f / float(REST_DENSITY) * wGradientSpikyKernel(p_i, p_j);
-	return Ci;
+	//glm::vec3 Ci = -1.0f / float(REST_DENSITY) * wGradientSpikyKernel(p_i, p_j);
+	//vec3 p_j((*pit)->PredictedPos);
+				//if(Particles[i]->id>(*pit)->id) continue;
+	//Ci=pow(spikyGradient(p-p_j,core_radius).Length()/material.rest_density,2);
+	//sum_gradients+=C_i_gradient;
+	return wGradientSpikyKernel(p_i,p_j)/REST_DENSITY;
 }
 
 __device__ glm::vec3 calculateCiGradientAti(particle* particles, glm::vec3 p_i, int* neighbors, int p_num_neighbors, int index){
@@ -315,6 +334,7 @@ __global__ void calculateLambda(particle* particles, int* neighbors, int* num_ne
 			// Calculate gradient when k = j
 			C_i_gradient = glm::length(calculateCiGradient(p, glm::vec3(particles[neighbors[i + index * MAX_NEIGHBORS]].pred_position)));
 			sum_gradients += (C_i_gradient * C_i_gradient);
+
 		}
 
 		// Add gradient when k = i
@@ -452,8 +472,17 @@ void applyExternalForces(int N, float dt, particle* particles)
 
     if(index < N){
 		particle p = particles[index];
-		p.velocity += dt * p.external_forces;
-		p.pred_position = p.position + dt * glm::vec4(p.velocity,0.0f);
+		//p.velocity += dt * p.external_forces;
+		//p.pred_position = p.position + dt * glm::vec4(p.velocity,0.0f);
+
+		p.velocity+=dt*p.external_forces;
+		//Particles[i]->PredictedPos=Particles[i]->position+dt*Particles[i]->velocity;
+		p.delta_pos=glm::vec3(0.0f);
+		p.pred_position=p.position+vec4(p.velocity*dt,0.0);
+		
+
+
+
 		particles[index] = p;
 	}
 }
@@ -612,8 +641,8 @@ void cudaPBFUpdateWrapper(float dt)
 	}
 
 	updateVelocity<<<fullBlocksPerGrid, blockSize>>>(numParticles, particles, dt);
-	//calculateCurl<<<fullBlocksPerGrid, blockSize>>>(particles, neighbors, num_neighbors, numParticles);
-	//applyVorticity<<<fullBlocksPerGrid, blockSize>>>(particles, neighbors, num_neighbors, numParticles);
+	calculateCurl<<<fullBlocksPerGrid, blockSize>>>(particles, neighbors, num_neighbors, numParticles);
+	applyVorticity<<<fullBlocksPerGrid, blockSize>>>(particles, neighbors, num_neighbors, numParticles);
 	updatePosition<<<fullBlocksPerGrid, blockSize>>>(numParticles, particles);
     checkCUDAErrorWithLine("updatePosition failed!");
     cudaThreadSynchronize();

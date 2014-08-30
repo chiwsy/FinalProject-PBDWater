@@ -1,4 +1,4 @@
-#version 330
+#version 150
 
 in vec3 WorldCoord;
 in vec3 ToCam;
@@ -6,6 +6,9 @@ in vec3 Up;
 in vec3 Right;
 in vec2 TexCoord;
 out vec4 FragColor;
+
+out vec4 out_Position;
+out vec4 out_Normal;
 
 void main()
 {
@@ -20,4 +23,6 @@ void main()
     float light = 0.1 + 0.9*clamp(dot(N,L),0.0, 1.0);
     vec3 color = vec3(0.2, 0.6, 1.0);
     FragColor = vec4(color*light,1.0);
+	out_Position=vec4(WorldCoord,1.0);
+	out_Normal=vec4(N,1.0);
 } 

@@ -1,4 +1,4 @@
-#version 330
+#version 150
 
 uniform mat4 u_projMatrix;
 uniform vec3 u_cameraPos;
@@ -13,12 +13,14 @@ out vec3 Up;
 out vec3 Right;
 out vec2 TexCoord;
 
+
 const float scale = .65;
 
 void main()
 {
     vec3 Position = gl_in[0].gl_Position.xyz;
     WorldCoord = Position;
+	
 
     ToCam = normalize(u_cameraPos - Position);
     Up = vec3(0.0, 0.0, 1.0);

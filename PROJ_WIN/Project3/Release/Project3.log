@@ -1,0 +1,40 @@
+﻿Build started 2014/8/28 10:52:23.
+     1>Project "D:\workspace\PhysiAnim\FinalProj\cuda\FinalProject-PBDWater-master\PROJ_WIN\Project3\Project3.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\FinalProject.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       AddCudaCompileDeps:
+       Skipping target "AddCudaCompileDeps" because all output files are up-to-date with respect to the input files.
+       AddCudaCompilePropsDeps:
+       Skipping target "AddCudaCompilePropsDeps" because all output files are up-to-date with respect to the input files.
+       CudaBuild:
+       Skipping target "CudaBuild" because all output files are up-to-date with respect to the input files.
+       ClCompile:
+         d:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"D:\Program Files\NVidia\NVIDIA GPU Computing Toolkit\CUDA\v6.0\include" /I"D:\Program Files\NVidia\NVIDIA GPU Computing Toolkit\CUDA\v6.0\Samples\common\inc" /I../shared/glew/includes /I../shared/freeglut/includes /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\src\main.cpp
+         main.cpp
+         Note: including lib: glut32.lib
+         
+     1>..\..\src\main.cpp(52): warning C4018: '<' : signed/unsigned mismatch
+     1>..\..\src\main.cpp(64): warning C4101: 'passthroughProgram' : unreferenced local variable
+     1>..\..\src\main.cpp(149): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 d:\Program Files\Microsoft Visual Studio 10.0\VC\include\stdio.h(371) : see declaration of 'sprintf'
+       Link:
+         d:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\workspace\PhysiAnim\FinalProj\cuda\FinalProject-PBDWater-master\PROJ_WIN\Release\FinalProject.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"D:\workspace\PhysiAnim\FinalProj\cuda\FinalProject-PBDWater-master\PROJ_WIN\shared\freeglut\lib" /LIBPATH:../shared/glew/lib /LIBPATH:../shared/freeglut/lib /LIBPATH:"D:\Program Files\NVidia\NVIDIA GPU Computing Toolkit\CUDA\v6.0\lib\Win32" cudart.lib glew32.lib glu32.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib glut32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\FinalProject.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\workspace\PhysiAnim\FinalProj\cuda\FinalProject-PBDWater-master\PROJ_WIN\Release\FinalProject.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\workspace\PhysiAnim\FinalProj\cuda\FinalProject-PBDWater-master\PROJ_WIN\Release\FinalProject.lib" /MACHINE:X86 "D:\workspace\PhysiAnim\FinalProj\cuda\FinalProject-PBDWater-master\PROJ_WIN\Project3\Win32/Release/kernel.cu.obj"
+         Release\glslUtility.obj
+         Release\main.obj
+         Release\obj.obj
+         Release\objloader.obj
+         Release\scene.obj
+         Release\utilities.obj
+         Generating code
+         Finished generating code
+         Project3.vcxproj -> D:\workspace\PhysiAnim\FinalProj\cuda\FinalProject-PBDWater-master\PROJ_WIN\Release\FinalProject.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"D:\workspace\PhysiAnim\FinalProj\cuda\FinalProject-PBDWater-master\PROJ_WIN\Release\FinalProject.exe;#1" /manifest Release\FinalProject.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Release\FinalProject.unsuccessfulbuild".
+         Touching "Release\FinalProject.lastbuildstate".
+     1>Done Building Project "D:\workspace\PhysiAnim\FinalProj\cuda\FinalProject-PBDWater-master\PROJ_WIN\Project3\Project3.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.70
